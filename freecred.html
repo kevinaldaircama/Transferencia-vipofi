@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gana Créditos Gratis</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      background-color: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    ol {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    .uid-box {
+      display: flex;
+      align-items: center;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .uid-text {
+      flex: 1;
+      font-weight: bold;
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .bot-btn {
+      background-color: #0088cc;
+      color: white;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .bot-btn:hover {
+      background-color: #007ab8;
+    }
+
+    .note {
+      font-size: 13px;
+      color: gray;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🎁 ¡Gana Créditos Gratis!</h1>
+  <p>Vincula tu cuenta con nuestro bot <strong>@kevintechtutorialssoporte</strong> y recibe <span style="color:green; font-weight:bold;">+10 créditos gratis</span>.</p>
+
+  <ol>
+    
+    <li>Copia tu ID único.</li>
+    <li>suscribete a nuestro canal de Youtube: <a href="https://youtube.com/@kevintechtutorials?si=gncUwh_4f1VoLTSv" target="_blank">crik</a></li>
+    <li>después que te suscribas envíame un mensaje diciendo que "quieres vincular tu cuenta".</li>
+    <li>Envía tu ID y la foto que te suscribiste para vincular tu cuenta</li>
+    <li>¡Listo! Recibirás tus créditos si es válido.</li>
+  </ol>
+
+  <div class="uid-box">
+    <span id="userUID" class="uid-text">Cargando ID...</span>
+    <button class="copy-btn" onclick="copiarUID()">Copiar</button>
+  </div>
+
+  <button class="bot-btn" onclick="window.open('https://t.me/KTTOFICIAL_BOT', '_blank')">
+    🔗 Enviar ID al Bot
+  </button>
+
+  <p class="note">* Solo puedes vincular tu cuenta una vez. Asegúrate de enviar tu UID correctamente.</p>
+</div>
+
+<!-- Firebase App y Auth (asegúrate de configurar tu proyecto) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script>
+  // 🔧 Configura aquí tu proyecto Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMw3Zbb-rcXoOXlT1U-WWN1N4L4bk1aCk",
+      authDomain: "sistema-27b31.firebaseapp.com",
+      databaseURL: "https://sistema-27b31-default-rtdb.firebaseio.com",
+      projectId: "sistema-27b31",
+      storageBucket: "sistema-27b31.appspot.com",
+      messagingSenderId: "32031316083",
+      appId: "1:32031316083:web:32cef8736c5a77fbb9f206"
+    };
+
+  // Inicializar Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Obtener UID del usuario actual
+  firebase.auth().onAuthStateChanged(user => {
+    const uidSpan = document.getElementById("userUID");
+    if (user) {
+      uidSpan.textContent = user.uid;
+    } else {
+      uidSpan.textContent = "registarte o Inicia sesión para ver tu ID";
+    }
+  });
+
+  // Función para copiar ID al portapapeles
+  function copiarUID() {
+    const uid = document.getElementById("userUID").textContent;
+    navigator.clipboard.writeText(uid).then(() => {
+      alert("✅ ID copiado: " + uid);
+    });
+  }
+</script>
+
+</body>
+</html>

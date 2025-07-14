@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suscripción VIP</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e2f;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .topbar {
+      background-color: #2c2c3c;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .btn-cursos {
+      background: #8b5cf6;
+      border: none;
+      padding: 8px 16px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .container {
+      padding: 20px;
+    }
+    .section-title {
+      background: #8b5cf6;
+      padding: 10px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    .card-grid {
+      display: none; /* oculto por defecto */
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+    .card {
+      background: #2c2c3c;
+      border-radius: 10px;
+      text-decoration: none;
+      color: white;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+    .card-content {
+      padding: 10px 15px;
+    }
+    .completado {
+      color: #4ade80;
+      font-weight: bold;
+    }
+    .error-msg {
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">KTT</div>
+    <div class="topbar-actions">
+      <button class="btn-cursos">Usuario Premium</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2 class="section-title">Curso y mucho más</h2>
+    <div class="card-grid" id="cardGrid">
+  <!-- Tarjeta 1 -->
+  <a href="https://youtu.be/IFzD_0Zk6z4" target="_blank" class="card">
+    <img src="IMG_20250616_135340.png" alt="Curso 1">
+    <div class="card-content">
+      <h3>Guía completa del sistema de transferencia VIP</h3>
+      <span class="completado">Ver ahora</span>
+    </div>
+  </a>
+
+  <!-- Tarjeta 2 -->
+  <a href="Cómo tener YouTube premium.html" target="_blank" class="card">
+    <img src="IMG_20250705_111705.png" alt="Curso 2">
+    <div class="card-content">
+      <h3>ómo tener YouTube premium totalmente gratis </h3>
+      <span class="completado">Ver ahora</span>
+    </div>
+  </a>
+
+  <!-- Tarjeta 3 -->
+  <a href="https://youtu.be/4pKly2JojMw" target="_blank" class="card">
+    <img src="curso3.png" alt="Curso 3">
+    <div class="card-content">
+      <h3>Trucos para optimizar tu cuenta VIP</h3>
+      <span class="completado">Ver ahora</span>
+    </div>
+  </a>
+
+  <!-- Tarjeta 4 -->
+  <a href="https://youtu.be/q0e6V8o8NGA" target="_blank" class="card">
+    <img src="curso4.png" alt="Curso 4">
+    <div class="card-content">
+      <h3>Marketing para afiliados: guía paso a paso</h3>
+      <span class="completado">Ver ahora</span>
+    </div>
+  </a>
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBMw3Zbb-rcXoOXlT1U-WWN1N4L4bk1aCk",
+      authDomain: "sistema-27b31.firebaseapp.com",
+      databaseURL: "https://sistema-27b31-default-rtdb.firebaseio.com",
+      projectId: "sistema-27b31",
+      storageBucket: "sistema-27b31.appspot.com",
+      messagingSenderId: "32031316083",
+      appId: "1:32031316083:web:32cef8736c5a77fbb9f206"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      auth.onAuthStateChanged(user => {
+        const cardGrid = document.getElementById('cardGrid');
+        const errorMsg = document.getElementById('errorMsg');
+
+        if (!user) {
+          window.location.href = 'index.html';
+          return;
+        }
+
+        const uid = user.uid;
+
+        // Obtener saldo y validar
+        db.ref(`usuarios/${uid}/comisionesTotales`).once('value').then(snapshot => {
+          const saldo = parseFloat(snapshot.val()) || 0;
+
+          if (saldo >= 1900) {
+            cardGrid.style.display = 'grid';
+          } else {
+            errorMsg.textContent = '❌ Acceso denegado: necesitas 1900 créditos para ingresar.';
+          }
+        }).catch(err => {
+          console.error(err);
+          errorMsg.textContent = 'Error al verificar tu saldo. Intenta nuevamente.';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Perfil</title>
+  <meta name="monetag" content="15fdd43a0ca6adc9b85bc663c4ff6974">
+  <script src="https://fpyf8.com/88/tag.min.js" data-zone="152195" async data-cfasync="false"></script>
+  <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9448841,document.createElement('script'))</script>
+  <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9448910,document.createElement('script'))</script>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#121212" />
+  <link rel="icon" type="image/png" href="3440119_ico.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .perfil-container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 320px;
+      text-align: center;
+    }
+
+    .perfil-container h2 {
+      margin-bottom: 20px;
+    }
+
+    .perfil-container img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .perfil-container input {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .perfil-container button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .perfil-container button:hover {
+      background: #0056b3;
+    }
+
+    .cerrar {
+      background: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="perfil-container">
+    <h2>Mi Perfil</h2>
+    <img id="fotoPerfil" src="https://www.w3schools.com/howto/img_avatar.png" alt="Foto de perfil"/>
+    
+    <input type="text" id="nombre" placeholder="Nombre completo" disabled />
+    <input type="email" id="correo" placeholder="Correo" disabled />
+    <input type="text" id="estado" placeholder="Estado" disabled />
+    <input type="text" id="fecha" placeholder="Fecha de registro" disabled />
+    <input type="text" id="nuevaContra" placeholder="Cambiar contraseña" />
+    <button id="guardarBtn">Guardar cambios</button>
+    <button class="cerrar" id="cerrarSesionBtn">Cerrar sesión</button>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      updatePassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8trNcvfkXBo6eMfQc85O5J1R-s8sF-rQ",
+      authDomain: "sistem-86419.firebaseapp.com",
+      projectId: "sistem-86419",
+      storageBucket: "sistem-86419.appspot.com",
+      messagingSenderId: "370404958161",
+      appId: "1:370404958161:web:4502f01d9a5b71961d0af0",
+      measurementId: "G-PLNZV8YC4F"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const nombre = document.getElementById("nombre");
+    const correo = document.getElementById("correo");
+    const estado = document.getElementById("estado");
+    const fecha = document.getElementById("fecha");
+    const nuevaContra = document.getElementById("nuevaContra");
+    const guardarBtn = document.getElementById("guardarBtn");
+    const cerrarSesionBtn = document.getElementById("cerrarSesionBtn");
+
+    
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        correo.value = user.email;
+        const uid = user.uid;
+        const docRef = doc(db, "usuarios", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          nombre.value = data.nombre || "No disponible";
+          estado.value = data.estado || "Sin estado";
+          fecha.value = data.fechaRegistro || "Sin fecha";
+        } else {
+          alert("No se encontraron datos.");
+        }
+      } else {
+        location.href = "loginvip.html";
+      }
+    });
+
+    guardarBtn.addEventListener("click", async () => {
+      const nueva = nuevaContra.value;
+      if (nueva.length < 6) {
+        alert("La nueva contraseña debe tener al menos 6 caracteres.");
+        return;
+      }
+      try {
+        await updatePassword(auth.currentUser, nueva);
+        alert("Contraseña actualizada con éxito.");
+        nuevaContra.value = "";
+      } catch (e) {
+        alert("Error al cambiar la contraseña: " + e.message);
+      }
+    });
+
+    cerrarSesionBtn.addEventListener("click", async () => {
+      const confirmar = confirm("¿Estás seguro de que deseas cerrar sesión?");
+      if (!confirmar) return;
+      try {
+        await signOut(auth);
+        location.href = "loginvip.html";
+      } catch (e) {
+        alert("Error al cerrar sesión: " + e.message);
+      }
+    });
+  </script>
+</body>
+</html>

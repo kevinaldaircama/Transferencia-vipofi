@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial</title>
+  <style>
+    :root {
+      --color-bg: #2c2f48;
+      --color-header: #1e2035;
+      --color-primary: #8c5de1;
+      --color-card: #383c57;
+      --color-text: #ffffff;
+      --color-subtext: #dddddd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--color-header);
+      padding: 15px 20px;
+      flex-wrap: wrap;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .header button {
+      background-color: var(--color-primary);
+      color: var(--color-text);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .header button:hover {
+      background-color: #764ed3;
+    }
+
+    .container {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .video-card {
+      background-color: var(--color-card);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .description {
+      margin-top: 20px;
+      font-weight: bold;
+      color: var(--color-subtext);
+      font-size: 1rem;
+      word-wrap: break-word;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header button {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .container {
+        padding: 10px;
+      }
+
+      .video-card {
+        padding: 15px;
+      }
+
+      .description {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .description {
+        font-size: 0.9rem;
+      }
+
+      .header h2 {
+        font-size: 1.3em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>TUTORIAL</h2>
+    <button onclick="window.location.href='curso.html'">Regresar</button>
+  </div>
+
+  <div class="container" id="content">
+    <div class="video-card">
+      <video controls>
+        <source src="InShot_20250705_174605928.mp4" type="video/mp4" />
+        Tu navegador no soporta la reproducción de video.
+      </video>
+      <div class="description">
+        Paso para la instalación, recuerda que es apk no cuenta.
+      </div>
+      <div class="description">
+        Descargar la aplicación haciendo crik en descargas apk.
+      </div>
+      <div class="description">
+        <a href="https://www.mediafire.com/file/a567bmswtj2ctmu/Youtube_premium_5.4.80.103_Noads.apk/file" style="color: #8c5de1;" target="_blank">
+          Descargar APK
+        </a>
+      </div>
+      <div class="description">
+        Después de descargar e instalar, ¡disfruta de tu YouTube premium totalmente gratis sin límites!
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="video.js"></script>
+</body>
+</html>

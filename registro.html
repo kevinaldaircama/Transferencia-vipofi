@@ -132,10 +132,7 @@
 
     // ✅ Obtener ID referido
     function obtenerIdReferido() {
-      const path = window.location.pathname;
-      const partes = path.split('/');
-      let rawId = partes[partes.length - 1];
-      return rawId.replace(/[.#$[\]/]/g, '');
+  return localStorage.getItem('referidoId') || null;
     }
 
     // ✅ Obtener referido desde URL o LocalStorage

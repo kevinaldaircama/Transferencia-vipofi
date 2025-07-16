@@ -273,10 +273,16 @@
         });
 
         // Mostrar saldo
-        db.ref(`usuarios/${uid}/comisionesTotales`).on('value', snapshot => {
-          const creditos = parseFloat(snapshot.val()) || 0;
-          document.getElementById('saldoUsuario').innerHTML = `$${creditos.toFixed(2)} <span class="text-muted">saldo actual a la fecha</span>`;
-        });
+        db.ref(`usuarios/${uid}`).on('value', snapshot => {
+  const userInfo = snapshot.val() || {};
+  const saldoInicial = parseFloat(userInfo.saldo || 0);
+  const comisionesTotales = parseFloat(userInfo.comisionesTotales || 0);
+  const comisionesPendientes = parseFloat(userInfo.comisionesPendientes || 0);
+
+  const saldoTotal = saldoInicial + comisionesTotales + comisionesPendientes;
+
+  document.getElementById('saldoUsuario').innerHTML = `$${saldoTotal.toFixed(2)} <span class="text-muted">saldo actual a la fecha</span>`;
+}); 
 
         // Mostrar UID y botón para copiar
         const uidTexto = document.createElement('p');
@@ -350,4 +356,4 @@ window.addEventListener("load", function(){
 });
 </script>
 </body>
-                                                                                           </html>
+    </html>

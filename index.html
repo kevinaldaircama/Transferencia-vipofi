@@ -10,16 +10,6 @@
   <meta name="theme-color" content="#121212" />
   <link rel="icon" type="image/png" href="3440119_ico.png">
 
-  <!-- ✅ Script para capturar referido y redirigir -->
-  <script>
-    const pathParts = window.location.pathname.split('/');
-    if (pathParts[1] === 'referido' && pathParts[2]) {
-      const refId = pathParts[2].replace(/[.#$[\]/]/g, '');
-      localStorage.setItem('idReferido', refId);
-      window.location.href = '/registro.html';
-    }
-  </script>
-
   <style>
     * { box-sizing: border-box; }
     body {

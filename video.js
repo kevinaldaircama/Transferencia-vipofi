@@ -4,14 +4,15 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 
 // Tu configuración de Firebase (reemplaza con tus datos)
 const firebaseConfig = {
-  apiKey: "AIzaSyB8trNcvfkXBo6eMfQc85O5J1R-s8sF-rQ",
-      authDomain: "sistem-86419.firebaseapp.com",
-      projectId: "sistem-86419",
-      storageBucket: "sistem-86419.firebasestorage.app",
-      messagingSenderId: "370404958161",
-      appId: "1:370404958161:web:4502f01d9a5b71961d0af0",
-      measurementId: "G-PLNZV8YC4F"
-    };
+  apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
+    authDomain: "transferencia-88fd7.firebaseapp.com",
+    databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
+    projectId: "transferencia-88fd7",
+    storageBucket: "transferencia-88fd7.firebasestorage.app",
+    messagingSenderId: "343352831024",
+    appId: "1:343352831024:web:9ac2d08b41874b15e611f5",
+    measurementId: "G-LNX1B0RLK7"
+  };
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);

@@ -160,22 +160,34 @@
           const userId = user.uid;
           const fecha = new Date().toISOString().split('T')[0];
 
-          const data = {
-            correo: email,
-            fecha: fecha,
-            estado: 'activo',
-            saldo: '0.00',
-            recargas: 0,
-            comision: '2.00',
-            ultima: '-'
-          };
+          const referidoId = obtenerIdReferido(); // Aquí ya lo tienes
+const saldoInicial = referidoId ? 10.00 : 5.00;
 
-          const updates = {};
-          updates[`referidos/${idReferido}/${userId}`] = data;
-          updates[`usuarios/${idReferido}/comisionesPendientes`] = firebase.database.ServerValue.increment(2);
+const data = {
+  correo: email,
+  fecha: fecha,
+  estado: 'activo',
+  saldo: saldoInicial.toFixed(2),
+  recargas: 0,
+  comision: '2.00',
+  ultima: '-'
+};
 
-          return db.ref().update(updates);
-        })
+const updates = {};
+if (referidoId) {
+  updates[`referidos/${referidoId}/${userId}`] = data;
+  updates[`usuarios/${referidoId}/comisionesPendientes`] = firebase.database.ServerValue.increment(2);
+}
+updates[`usuarios/${userId}`] = {
+  correo: email,
+  creado: fecha,
+  referidoId: referidoId || null,
+  comisionesTotales: 0,
+  comisionesPendientes: 0,
+  saldo: saldoInicial.toFixed(2)
+};
+
+return db.ref().update(updates);
         .then(() => {
           localStorage.removeItem('idReferido'); // 🧹 Limpieza
           alert('Registro exitoso. Ahora puedes iniciar sesión.');

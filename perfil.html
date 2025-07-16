@@ -3,172 +3,180 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mi Perfil</title>
-  <meta name="monetag" content="15fdd43a0ca6adc9b85bc663c4ff6974">
-  <script src="https://fpyf8.com/88/tag.min.js" data-zone="152195" async data-cfasync="false"></script>
-  <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9448841,document.createElement('script'))</script>
-  <script>(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',9448910,document.createElement('script'))</script>
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#121212" />
-  <link rel="icon" type="image/png" href="3440119_ico.png">
+  <title>Transferencia VIP - Inicio</title>
+  <link rel="icon" href="assets/3440119_ico.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="description" content="Transferencia VIP: Transfiere, gana y multiplica tu saldo con cada acción.">
+  <meta property="og:title" content="Transferencia VIP - Transfiere y gana" />
+  <meta property="og:description" content="Gana créditos al registrarte y compartir tu link. ¡Únete ahora!" />
+  <meta property="og:image" content="https://transferenciavip.xyz/logo-oficial.png" />
+  <meta property="og:url" content="https://transferenciavip.xyz/" />
+  <meta name="twitter:card" content="summary_large_image" />
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      background: #f1f1f1;
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0f2027);
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    #loaderOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #0f2027;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
     }
-
-    .perfil-container {
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      width: 320px;
+    #loaderOverlay img {
+      width: 80px;
+      animation: pulse 1.5s infinite;
+    }
+    .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    header {
       text-align: center;
+      padding: 40px 20px 20px;
+      animation: fadeIn 1s ease;
     }
-
-    .perfil-container h2 {
-      margin-bottom: 20px;
-    }
-
-    .perfil-container img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
+    header img {
+      width: 90px;
       border-radius: 50%;
-      cursor: pointer;
-      margin-bottom: 15px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
-
-    .perfil-container input {
-      width: 100%;
-      margin-bottom: 15px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+    header h1 {
+      margin-top: 15px;
+      font-size: 2em;
+      font-weight: 600;
     }
-
-    .perfil-container button {
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+    header p {
+      color: #bbb;
+      font-size: 1em;
       margin-top: 10px;
     }
-
-    .perfil-container button:hover {
-      background: #0056b3;
+    main {
+      text-align: center;
+      padding: 30px 20px;
+      flex: 1;
+      animation: fadeIn 1s ease;
+      max-width: 500px;
+      margin: auto;
     }
-
-    .cerrar {
-      background: #dc3545;
+    .btn-group {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    .btn {
+      background: #00c6ff;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1em;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn:hover {
+      background: #0090d9;
+      transform: translateY(-2px);
+    }
+    .btn.secondary {
+      background: #c471f5;
+    }
+    .btn.secondary:hover {
+      background: #a551dc;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #aaa;
+      background-color: rgba(255,255,255,0.05);
+      animation: fadeIn 1.5s ease;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @media (max-width: 480px) {
+      .btn { width: 100%; }
     }
   </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <div class="perfil-container">
-    <h2>Mi Perfil</h2>
-    <img id="fotoPerfil" src="https://www.w3schools.com/howto/img_avatar.png" alt="Foto de perfil"/>
-    
-    <input type="text" id="nombre" placeholder="Nombre completo" disabled />
-    <input type="email" id="correo" placeholder="Correo" disabled />
-    <input type="text" id="estado" placeholder="Estado" disabled />
-    <input type="text" id="fecha" placeholder="Fecha de registro" disabled />
-    <input type="text" id="nuevaContra" placeholder="Cambiar contraseña" />
-    <button id="guardarBtn">Guardar cambios</button>
-    <button class="cerrar" id="cerrarSesionBtn">Cerrar sesión</button>
+
+  <!-- Loader -->
+  <div id="loaderOverlay">
+    <img src="3440119_ico.png" alt="Cargando..." />
   </div>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      updatePassword,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <header>
+    <img src="3440119_ico.png" alt="Transferencia VIP Logo" />
+    <h1>Transferencia VIP</h1>
+    <p>gana servidores vps apk mod y mucho más totalmente gratis solo compartiendo el link de referido</p>
+  </header>
 
+  <main>
+    <div class="btn-group">
+      <button class="btn" onclick="location.href='login.html'">Iniciar Sesión</button>
+      <button class="btn secondary" onclick="location.href='acce.html'">Registrarse</button>
+      <button class="btn" onclick="location.href='plane.html'">Ver Planes</button>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 Transferencia VIP · Todos los derechos reservados
+  </footer>
+
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyB8trNcvfkXBo6eMfQc85O5J1R-s8sF-rQ",
-      authDomain: "sistem-86419.firebaseapp.com",
-      projectId: "sistem-86419",
-      storageBucket: "sistem-86419.appspot.com",
-      messagingSenderId: "370404958161",
-      appId: "1:370404958161:web:4502f01d9a5b71961d0af0",
-      measurementId: "G-PLNZV8YC4F"
+        apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
+    authDomain: "transferencia-88fd7.firebaseapp.com",
+    databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
+    projectId: "transferencia-88fd7",
+    storageBucket: "transferencia-88fd7.firebasestorage.app",
+    messagingSenderId: "343352831024",
+    appId: "1:343352831024:web:9ac2d08b41874b15e611f5",
+    measurementId: "G-LNX1B0RLK7"
     };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const nombre = document.getElementById("nombre");
-    const correo = document.getElementById("correo");
-    const estado = document.getElementById("estado");
-    const fecha = document.getElementById("fecha");
-    const nuevaContra = document.getElementById("nuevaContra");
-    const guardarBtn = document.getElementById("guardarBtn");
-    const cerrarSesionBtn = document.getElementById("cerrarSesionBtn");
-
-    
-
-    onAuthStateChanged(auth, async (user) => {
+    // Redirección si el usuario ya está logueado
+    auth.onAuthStateChanged(user => {
       if (user) {
-        correo.value = user.email;
-        const uid = user.uid;
-        const docRef = doc(db, "usuarios", uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          nombre.value = data.nombre || "No disponible";
-          estado.value = data.estado || "Sin estado";
-          fecha.value = data.fechaRegistro || "Sin fecha";
-        } else {
-          alert("No se encontraron datos.");
-        }
-      } else {
-        location.href = "loginvip.html";
+        window.location.href = "menu.html";
       }
     });
 
-    guardarBtn.addEventListener("click", async () => {
-      const nueva = nuevaContra.value;
-      if (nueva.length < 6) {
-        alert("La nueva contraseña debe tener al menos 6 caracteres.");
-        return;
-      }
-      try {
-        await updatePassword(auth.currentUser, nueva);
-        alert("Contraseña actualizada con éxito.");
-        nuevaContra.value = "";
-      } catch (e) {
-        alert("Error al cambiar la contraseña: " + e.message);
-      }
-    });
-
-    cerrarSesionBtn.addEventListener("click", async () => {
-      const confirmar = confirm("¿Estás seguro de que deseas cerrar sesión?");
-      if (!confirmar) return;
-      try {
-        await signOut(auth);
-        location.href = "loginvip.html";
-      } catch (e) {
-        alert("Error al cerrar sesión: " + e.message);
-      }
+    // Ocultar loader
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loaderOverlay').classList.add('hidden');
+      }, 1500);
     });
   </script>
 </body>

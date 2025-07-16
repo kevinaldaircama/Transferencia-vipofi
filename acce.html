@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bienvenida - Transferencia VIP</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      padding: 40px;
+    }
+
+    .mensaje {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #ffffffdd;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      width: 120px;
+      margin: 15px auto;
+      display: none;
+    }
+
+    .alerta {
+      font-size: 0.95em;
+      color: #d32f2f;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mensajeBienvenida" class="mensaje"></div>
+
+  <!-- Logos -->
+  <img id="logoOficial" class="logo" src="https://transferenciavip.xyz/logo-oficial.png" alt="Logo Oficial">
+  <img id="logoGratis" class="logo" src="https://transferenciavip.netlify.app/logo-gratis.png" alt="Logo Gratuito">
+
+  <script>
+    const dominio = window.location.hostname;
+    const mensaje = document.getElementById('mensajeBienvenida');
+    const logoOficial = document.getElementById('logoOficial');
+    const logoGratis = document.getElementById('logoGratis');
+
+    if (dominio.includes("transferenciavip.xyz")) {
+      mensaje.innerHTML = `
+        👑 <strong>Bienvenido desde el dominio OFICIAL</strong><br>
+        <span class="alerta">⚠️ Si te registras aquí, no funcionará en el dominio gratuito.</span>
+      `;
+      logoOficial.style.display = "block";
+    } else if (dominio.includes("netlify.app")) {
+      mensaje.innerHTML = `
+        🌐 <strong>Bienvenido desde el dominio GRATUITO</strong><br>
+        <span class="alerta">⚠️ Si te registras aquí, no funcionará en el dominio oficial.</span>
+      `;
+      logoGratis.style.display = "block";
+    } else {
+      mensaje.innerHTML = `🌍 Bienvenido a <strong>Transferencia VIP</strong>`;
+    }
+  </script>
+
+</body>
+</html>

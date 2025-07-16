@@ -35,20 +35,6 @@
       margin-bottom: 25px;
     }
 
-    .logos {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin-bottom: 25px;
-    }
-
-    .logos img {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
     .btn-option {
       display: block;
       width: 100%;
@@ -91,18 +77,6 @@
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    @media (max-width: 500px) {
-      .logos {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .logos img {
-        width: 50px;
-        height: 50px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -110,10 +84,6 @@
   <div class="card">
     <h2>Antes de registrarte,<br>¿qué <strong>team</strong> deseas pertenecer?</h2>
 
-    <div class="logos">
-      <img src="https://transferenciavip.netlify.app/logo-gratis.png" alt="Logo Gratis">
-      <img src="https://transferenciavip.xyz/logo-oficial.png" alt="Logo Oficial">
-    </div>
 
     <button class="btn-option btn-free" onclick="window.location.href='https://transferenciavip.netlify.app'">
       🔵 Team Gratis
@@ -123,7 +93,7 @@
       🟣 Team Paga
     </button>
 
-    <p class="alerta">⚠️ Recuerda que si te registras en uno no puedes acceder al otro.</p>
+    <p class="alerta">⚠️ Recuerda que si te registras en uno de los 2 tendrás una sorpresa escondida.</p>
   </div>
 
 </body>

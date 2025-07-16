@@ -9,7 +9,15 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#121212" />
   <link rel="icon" type="image/png" href="3440119_ico.png">
-
+<script>
+  // Detectar si la URL es /referido/ALGO y guardar el ID en localStorage
+  const pathParts = window.location.pathname.split('/');
+  if (pathParts[1] === "referido" && pathParts[2]) {
+    const refId = pathParts[2].replace(/[.#$[\]/]/g, '');
+    localStorage.setItem('referidoId', refId);
+    window.location.href = "/registro.html";  // Redirigir al formulario
+  }
+</script>
   <style>
     * { box-sizing: border-box; }
     body {

@@ -270,9 +270,11 @@
       <button class="yes" onclick="cobrarComisiones()">Sí</button>      
       <button class="no" onclick="cerrarModal()">No</button>      
     </div>      
-  </div><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script><script>      
-  const firebaseConfig = {      
-  apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script><script>      
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
     authDomain: "transferencia-88fd7.firebaseapp.com",
     databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
     projectId: "transferencia-88fd7",
@@ -281,157 +283,159 @@
     appId: "1:343352831024:web:9ac2d08b41874b15e611f5",
     measurementId: "G-LNX1B0RLK7"
   };
-      
-  firebase.initializeApp(firebaseConfig);      
-  const auth = firebase.auth();      
-  const db = firebase.database();      
-      
-  let referidosArray = [];      
-  let refIdGlobal = null;      
-      
-  function copiarEnlace() {      
-    const input = document.getElementById('referralLink');      
-    input.select();      
-    document.execCommand('copy');      
-    alert('¡Enlace copiado!');      
-  }      
-      
-  function mostrarModal() {      
-    document.getElementById('modal').style.display = 'flex';      
-  }      
-      
-  function cerrarModal() {      
-    document.getElementById('modal').style.display = 'none';      
-  }      
-      
-  function renderReferidos() {      
-    const orden = document.getElementById('ordenSelect').value;      
-    const tbody = document.getElementById('referidosTable');      
-    tbody.innerHTML = '';      
-      
-    let lista = [...referidosArray];      
-    lista.sort((a, b) => {      
-      const fechaA = new Date(a.fecha);      
-      const fechaB = new Date(b.fecha);      
-      return orden === 'recientes' ? fechaB - fechaA : fechaA - fechaB;      
-    });      
-      
-    if (lista.length === 0) {      
-      tbody.innerHTML = '<tr><td colspan="7" class="no-data">No se encontraron referidos<br><small>Comparte tu código para empezar a ganar</small></td></tr>';      
-      return;      
-    }      
-      
-    lista.forEach(r => {      
-      tbody.innerHTML += `      
-        <tr>      
-          <td>${r.correo}</td>      
-          <td>${r.fecha}</td>      
-          <td>${r.estado}</td>      
-          <td>${r.saldo || '0.00'}</td>      
-          <td>${r.recargas || 0}</td>      
-          <td>${r.comision || '0.00'}</td>      
-          <td>${r.ultima || '-'}</td>      
-        </tr>`;      
-    });      
-  }      
-      
-  function cobrarComisiones() {      
-    const uid = auth.currentUser.uid;      
-    db.ref(`usuarios/${uid}`).once('value').then(snap => {      
-      const datos = snap.val() || {};      
-      const pendientes = parseFloat(datos.comisionesPendientes || 0);      
-      const totales = parseFloat(datos.comisionesTotales || 0);      
-      
-      if (pendientes > 0) {      
-        const nuevoTotal = totales + pendientes;      
-        db.ref(`usuarios/${uid}`).update({      
-          comisionesPendientes: 0,      
-          comisionesTotales: nuevoTotal      
-        });      
-      
-        if (refIdGlobal) {      
-          db.ref(`referidos/${refIdGlobal}`).once('value').then(refsSnap => {      
-            const referidos = refsSnap.val() || {};      
-            for (let key in referidos) {      
-              const r = referidos[key];      
-              if (r.estado === 'activo') {      
-                db.ref(`referidos/${refIdGlobal}/${key}/comision`).set('Cobrado');      
-              }      
-            }      
-            location.reload();      
-          });      
-        }      
-      }      
-      cerrarModal();      
-    });      
-  }      
-      
-  auth.onAuthStateChanged(user => {      
-    if (!user) return window.location.href = 'index.html';      
-    const uid = user.uid;      
-      
-    db.ref(`usuarios/${uid}/referidoId`).once('value').then(snapshot => {      
-      let refId = snapshot.val();      
-      if (!refId) {      
-        refId = uid.substring(0, 2) + Math.floor(Math.random() * 100) + uid.substring(uid.length - 2);      
-        db.ref(`usuarios/${uid}/referidoId`).set(refId);      
-      }      
-      refIdGlobal = refId;      
-      document.getElementById('referralLink').value = `${window.location.origin}/referido/${refId}`; 
-      
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  let referidosArray = [];
+  let refIdGlobal = null;
+
+  function copiarEnlace() {
+    const input = document.getElementById('referralLink');
+    input.select();
+    document.execCommand('copy');
+    alert('¡Enlace copiado!');
+  }
+
+  function mostrarModal() {
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function cerrarModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function renderReferidos() {
+    const orden = document.getElementById('ordenSelect').value;
+    const tbody = document.getElementById('referidosTable');
+    tbody.innerHTML = '';
+
+    let lista = [...referidosArray];
+    lista.sort((a, b) => {
+      const fechaA = new Date(a.fecha);
+      const fechaB = new Date(b.fecha);
+      return orden === 'recientes' ? fechaB - fechaA : fechaA - fechaB;
+    });
+
+    if (lista.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="no-data">No se encontraron referidos<br><small>Comparte tu código para empezar a ganar</small></td></tr>';
+      return;
+    }
+
+    lista.forEach(r => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${r.correo || '-'}</td>
+          <td>${r.fecha || '-'}</td>
+          <td>${r.estado || '-'}</td>
+          <td>${r.saldo || '0.00'}</td>
+          <td>${r.recargas || 0}</td>
+          <td>${r.comision || '0.00'}</td>
+          <td>${r.ultima || '-'}</td>
+        </tr>`;
+    });
+  }
+
+  function cobrarComisiones() {
+    const uid = auth.currentUser.uid;
+    db.ref(`usuarios/${uid}`).once('value').then(snap => {
+      const datos = snap.val() || {};
+      const pendientes = parseFloat(datos.comisionesPendientes || 0);
+      const totales = parseFloat(datos.comisionesTotales || 0);
+
+      if (pendientes > 0) {
+        const nuevoTotal = totales + pendientes;
+        db.ref(`usuarios/${uid}`).update({
+          comisionesPendientes: 0,
+          comisionesTotales: nuevoTotal
+        });
+
+        if (refIdGlobal) {
+          db.ref(`referidos/${refIdGlobal}`).once('value').then(refsSnap => {
+            const referidos = refsSnap.val() || {};
+            for (let key in referidos) {
+              const r = referidos[key];
+              if (r.estado === 'activo') {
+                db.ref(`referidos/${refIdGlobal}/${key}/comision`).set('Cobrado');
+              }
+            }
+            location.reload();
+          });
+        }
+      }
+      cerrarModal();
+    });
+  }
+
+  auth.onAuthStateChanged(user => {
+    if (!user) return window.location.href = 'index.html';
+    const uid = user.uid;
+
+    db.ref(`usuarios/${uid}/referidoId`).once('value').then(snapshot => {
+      let refId = snapshot.val();
+      if (!refId) {
+        refId = uid.substring(0, 2) + Math.floor(Math.random() * 100) + uid.substring(uid.length - 2);
+        db.ref(`usuarios/${uid}/referidoId`).set(refId);
+      }
+      refIdGlobal = refId;
+
+      document.getElementById('referralLink').value = `${window.location.origin}/referido/${refId}`;
+
+      // 🔄 Escucha en tiempo real cambios en los referidos
       db.ref(`referidos/${refId}`).on('value', snap => {
-  const data = snap.val();
-  ...
-});
-        referidosArray = [];      
-        let total = 0, activos = 0, comisionesPendientes = 0;      
-      
-        if (data) {      
-          for (let key in data) {      
-            const r = data[key];      
-            total++;      
-            if (r.estado === 'activo' && r.comision !== 'Cobrado') {      
-              activos++;      
-              comisionesPendientes += 2;      
-            }      
-            referidosArray.push(r);      
-          }      
-        }      
-      
-        document.getElementById('totalReferidos').innerText = total;      
-        document.getElementById('referidosActivos').innerText = activos;      
-      
-        db.ref(`usuarios/${uid}/comisionesPendientes`).set(comisionesPendientes);      
-        renderReferidos();      
-      });      
-      
-      db.ref(`usuarios/${uid}`).on('value', snap => {      
-        const userInfo = snap.val() || {};      
-        const total = parseFloat(userInfo.comisionesTotales || 0);      
-        const pendientes = parseFloat(userInfo.comisionesPendientes || 0);      
-      
-        document.getElementById('comisionesTotales').innerText = total.toFixed(2) + ' créditos';      
-        document.getElementById('comisionesPendientes').innerText = pendientes.toFixed(2);      
-        document.getElementById('saldoTotal').innerText = 'Mi saldo actual: 🪙 ' + (total + pendientes);      
-      
-        const btn = document.getElementById('btnCobrar');      
-        if (pendientes <= 0) {      
-          btn.disabled = true;      
-          btn.innerText = 'No hay comisiones por cobrar';      
-          btn.style.opacity = 0.6;      
-          btn.style.cursor = 'not-allowed';      
-        } else {      
-          btn.disabled = false;      
-          btn.innerText = 'Cobrar Comisiones';      
-          btn.style.opacity = 1;      
-          btn.style.cursor = 'pointer';      
-        }      
-      });      
-    });      
-  });      
-      
-  function ordenarReferidos() {      
-    renderReferidos();      
-  }      
-</script></body>      
+        const data = snap.val();
+        referidosArray = [];
+        let total = 0, activos = 0, comisionesPendientes = 0;
+
+        if (data) {
+          for (let key in data) {
+            const r = data[key];
+            total++;
+            if (r.estado === 'activo' && r.comision !== 'Cobrado') {
+              activos++;
+              comisionesPendientes += 2;
+            }
+            referidosArray.push(r);
+          }
+        }
+
+        document.getElementById('totalReferidos').innerText = total;
+        document.getElementById('referidosActivos').innerText = activos;
+
+        db.ref(`usuarios/${uid}/comisionesPendientes`).set(comisionesPendientes);
+        renderReferidos();
+      });
+
+      // También escuchar comisiones actualizadas
+      db.ref(`usuarios/${uid}`).on('value', snap => {
+        const userInfo = snap.val() || {};
+        const total = parseFloat(userInfo.comisionesTotales || 0);
+        const pendientes = parseFloat(userInfo.comisionesPendientes || 0);
+
+        document.getElementById('comisionesTotales').innerText = total.toFixed(2) + ' créditos';
+        document.getElementById('comisionesPendientes').innerText = pendientes.toFixed(2);
+        document.getElementById('saldoTotal').innerText = 'Mi saldo actual: 🪙 ' + (total + pendientes).toFixed(2);
+
+        const btn = document.getElementById('btnCobrar');
+        if (pendientes <= 0) {
+          btn.disabled = true;
+          btn.innerText = 'No hay comisiones por cobrar';
+          btn.style.opacity = 0.6;
+          btn.style.cursor = 'not-allowed';
+        } else {
+          btn.disabled = false;
+          btn.innerText = 'Cobrar Comisiones';
+          btn.style.opacity = 1;
+          btn.style.cursor = 'pointer';
+        }
+      });
+    });
+  });
+
+  function ordenarReferidos() {
+    renderReferidos();
+  }
+</script>
+  </body>      
   </html>

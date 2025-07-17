@@ -379,8 +379,10 @@
       refIdGlobal = refId;      
       document.getElementById('referralLink').value = `${window.location.origin}/referido/${refId}`; 
       
-      db.ref(`referidos/${refId}`).once('value', snap => {      
-        const data = snap.val();      
+      db.ref(`referidos/${refId}`).on('value', snap => {
+  const data = snap.val();
+  ...
+});
         referidosArray = [];      
         let total = 0, activos = 0, comisionesPendientes = 0;      
       

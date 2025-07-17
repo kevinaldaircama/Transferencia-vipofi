@@ -203,7 +203,7 @@ const data = {
     
           const updates = {};    
           updates[`referidos/${idReferido}/${userId}`] = data;    
-          updates[`usuarios/${idReferido}/comisionesPendientes`] = firebase.database.ServerValue.increment(2);    
+          updates[`usuarios/${idReferido}/comisionesTotales`] = firebase.database.ServerValue.increment(2);    
     
           return db.ref().update(updates);    
         })    
@@ -243,7 +243,7 @@ const data = {
     
           const updates = {};    
           updates[`referidos/${idReferido}/${userId}`] = data;    
-          updates[`usuarios/${idReferido}/comisionesPendientes`] = firebase.database.ServerValue.increment(2);    
+          updates[`usuarios/${idReferido}/comisionesTotales`] = firebase.database.ServerValue.increment(2);    
     
           return db.ref().update(updates);    
         })    

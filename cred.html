@@ -44,7 +44,7 @@
 
 <script>
   const firebaseConfig = {
-      apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
+    apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
     authDomain: "transferencia-88fd7.firebaseapp.com",
     databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
     projectId: "transferencia-88fd7",
@@ -107,22 +107,43 @@
             `$${nuevoSaldo.toFixed(2)} <span class="text-muted">saldo actualizado</span>`;
         }
 
+        // 💡 LIMPIAR CAMPOS
+        document.getElementById('inputUid').value = '';
+        document.getElementById('inputMonto').value = '';
+
+        // 🔁 ACTUALIZAR TAMBIÉN EN REFERIDOS
         db.ref(`usuarios/${uid}/referidoId`).once('value').then(refSnap => {
           const refId = refSnap.val();
-          if (!refId) return;
+          if (!refId) {
+            console.warn(`El usuario ${uid} no tiene aún un referidoId asignado.`);
+            return;
+          }
 
           const referidoRef = db.ref(`referidos/${refId}/${uid}`);
-          referidoRef.once('value').then(snap => {
-            const refData = snap.val() || {};
-            const saldoAnterior = parseFloat(refData.saldo || 0);
-            const recargasAnteriores = parseInt(refData.recargas || 0);
-            const nuevaFecha = new Date().toLocaleDateString('es-ES');
+          const hoy = new Date().toLocaleDateString('es-ES');
 
-            referidoRef.update({
-              saldo: (saldoAnterior + monto).toFixed(2),
-              recargas: recargasAnteriores + 1,
-              ultima: nuevaFecha
-            });
+          referidoRef.once('value').then(snap => {
+            const refData = snap.val();
+
+            if (!refData || Object.keys(refData).length === 0) {
+              referidoRef.set({
+                correo: '-',
+                estado: 'activo',
+                saldo: monto.toFixed(2),
+                recargas: 1,
+                comision: '2.00',
+                ultima: hoy
+              });
+            } else {
+              const saldoAnterior = isNaN(parseFloat(refData.saldo)) ? 0 : parseFloat(refData.saldo);
+              const recargasAnteriores = isNaN(parseInt(refData.recargas)) ? 0 : parseInt(refData.recargas);
+
+              referidoRef.update({
+                saldo: (saldoAnterior + monto).toFixed(2),
+                recargas: recargasAnteriores + 1,
+                ultima: hoy
+              });
+            }
           });
         });
 
@@ -140,4 +161,4 @@
   }
 </script>
 </body>
-  </html>
+</html>

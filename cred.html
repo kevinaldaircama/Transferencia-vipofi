@@ -1,6 +1,4 @@
-<!-- panel.html -->
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html><html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,35 +13,23 @@
     .no-access { text-align: center; color: red; margin-top: 3rem; font-weight: bold; display: none; }
   </style>
 </head>
-<body>
-
-<div class="container">
+<body><div class="container">
   <div class="credit-box" id="adminPanel">
     <h3 class="text-center">Panel de Recarga de Créditos</h3>
     <hr>
     <h5>Saldo Total</h5>
     <p id="saldoUsuario">$0.00 <span class="text-muted">saldo actual a la fecha</span></p>
     <p id="uidUsuario">UID: cargando...</p>
+    <p>Plan actual: <span class="text-warning" id="tipoPlan">FREE</span></p>
     <div class="progress mb-3">
       <div class="progress-bar bg-success" style="width:100%">Saldo</div>
-    </div>
+    </div><h5>Recargar Créditos</h5>
+<input type="text" id="inputUid" class="form-control" placeholder="Ingrese UID del usuario">
+<input type="text" id="inputMonto" class="form-control" placeholder="Ej: +50 para recargar, -50 para descontar">
+<button class="btn btn-success w-100" onclick="recargarCreditos()">Procesar</button>
 
-    <h5>Recargar Créditos</h5>
-    <input type="text" id="inputUid" class="form-control" placeholder="Ingrese UID del usuario">
-    <input type="number" id="inputMonto" class="form-control" placeholder="Monto a recargar">
-    <button class="btn btn-success w-100" onclick="recargarCreditos()">Recargar</button>
-  </div>
-
-  <div id="noAccessMsg" class="no-access">Acceso denegado: solo administradores autorizados pueden usar este panel.</div>
-</div>
-
-<!-- Firebase Scripts -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
-<!-- Lógica de recarga con asignación de plan -->
-<script>
+  </div>  <div id="noAccessMsg" class="no-access">Acceso denegado: solo administradores autorizados pueden usar este panel.</div>
+</div><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script><script>
   const firebaseConfig = {
     apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
     authDomain: "transferencia-88fd7.firebaseapp.com",
@@ -76,7 +62,6 @@
             `$${creditos.toFixed(2)} <span class="text-muted">saldo actual a la fecha</span>`;
         });
 
-        // Mostrar el plan del usuario logueado
         db.ref(`usuarios/${uid}/plan`).on('value', snap => {
           const plan = snap.val() || 'FREE';
           const tipoPlanEl = document.getElementById('tipoPlan');
@@ -93,7 +78,6 @@
           else if (plan === 'VIP') tipoPlanEl.classList.add('text-primary');
           else if (plan === 'DIAMANTE') tipoPlanEl.classList.add('text-success');
         });
-
       } else {
         document.getElementById('noAccessMsg').style.display = 'block';
       }
@@ -105,10 +89,12 @@
 
   function recargarCreditos() {
     const uid = document.getElementById('inputUid').value.trim();
-    const monto = parseFloat(document.getElementById('inputMonto').value);
+    const input = document.getElementById('inputMonto').value.trim();
+    const signo = input.charAt(0);
+    const valor = parseFloat(input.substring(1));
 
-    if (!uid || isNaN(monto) || monto <= 0) {
-      alert('Ingrese un UID válido y un monto mayor a 0.');
+    if (!uid || (signo !== '+' && signo !== '-') || isNaN(valor) || valor <= 0) {
+      alert('Ingrese un UID válido y un monto con signo + o - al inicio.');
       return;
     }
 
@@ -117,27 +103,32 @@
     creditosRef.once('value')
       .then(snapshot => {
         const saldoActual = parseFloat(snapshot.val()) || 0;
-        const nuevoSaldo = saldoActual + monto;
+        const nuevoSaldo = signo === '+' ? saldoActual + valor : Math.max(0, saldoActual - valor);
         return creditosRef.set(nuevoSaldo).then(() => nuevoSaldo);
       })
       .then(nuevoSaldo => {
-        alert('Recarga exitosa.');
+        alert('Operación exitosa.');
 
-        // ✅ Determinar plan según el monto recargado
         let nuevoPlan = "FREE";
-        if (monto >= 10 && monto < 50) {
+        if (nuevoSaldo >= 10 && nuevoSaldo < 50) {
           nuevoPlan = "BRONCE";
-        } else if (monto >= 50 && monto < 80) {
+        } else if (nuevoSaldo >= 50 && nuevoSaldo < 80) {
           nuevoPlan = "ORO";
-        } else if (monto >= 80 && monto < 120) {
+        } else if (nuevoSaldo >= 80 && nuevoSaldo < 120) {
           nuevoPlan = "PREMIUM";
-        } else if (monto >= 120 && monto < 200) {
+        } else if (nuevoSaldo >= 120 && nuevoSaldo < 200) {
           nuevoPlan = "VIP";
-        } else if (monto >= 200) {
+        } else if (nuevoSaldo >= 200) {
           nuevoPlan = "DIAMANTE";
         }
 
-        db.ref(`usuarios/${uid}/plan`).set(nuevoPlan);
+        db.ref(`usuarios/${uid}/plan`).set(nuevoPlan).catch(err => console.warn("Error al guardar plan:", err));
+
+        db.ref(`usuarios/${uid}/notificacionRecarga`).set({
+          mensaje: `Tu saldo ha sido ${signo === '+' ? 'aumentado' : 'reducido'} en ${valor.toFixed(2)} créditos.`,
+          timestamp: Date.now(),
+          leido: false
+        }).catch(err => console.warn("Error al guardar notificación:", err));
 
         if (auth.currentUser && auth.currentUser.uid === uid) {
           document.getElementById('tipoPlan').innerText = nuevoPlan;
@@ -145,53 +136,11 @@
 
         document.getElementById('inputUid').value = '';
         document.getElementById('inputMonto').value = '';
-
-        // 🔁 Actualizar referidos si existen
-        db.ref(`usuarios/${uid}/referidoId`).once('value').then(refSnap => {
-          const refId = refSnap.val();
-          if (!refId) return;
-
-          const referidoRef = db.ref(`referidos/${refId}/${uid}`);
-          const hoy = new Date().toLocaleDateString('es-ES');
-
-          referidoRef.once('value').then(snap => {
-            const refData = snap.val();
-
-            if (!refData || Object.keys(refData).length === 0) {
-              referidoRef.set({
-                correo: '-',
-                estado: 'activo',
-                saldo: monto.toFixed(2),
-                recargas: 1,
-                comision: '2.00',
-                ultima: hoy
-              });
-            } else {
-              const saldoAnterior = isNaN(parseFloat(refData.saldo)) ? 0 : parseFloat(refData.saldo);
-              const recargasAnteriores = isNaN(parseInt(refData.recargas)) ? 0 : parseInt(refData.recargas);
-
-              referidoRef.update({
-                saldo: (saldoAnterior + monto).toFixed(2),
-                recargas: recargasAnteriores + 1,
-                ultima: hoy
-              });
-            }
-          });
-        });
-
-        // ✅ Notificación
-        db.ref(`usuarios/${uid}/notificacionRecarga`).set({
-          mensaje: `Se recargaron correctamente ${monto.toFixed(2)} créditos a tu cuenta.`,
-          timestamp: Date.now(),
-          leido: false
-        });
-
       })
       .catch(error => {
-        console.error('Error al recargar:', error);
-        alert('Error al procesar la recarga.');
+        console.error('Error durante la operación de saldo:', error);
+        alert('Error al procesar la operación.');
       });
   }
-</script>
-</body>
+</script></body>
 </html>

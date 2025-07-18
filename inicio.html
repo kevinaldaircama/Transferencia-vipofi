@@ -174,7 +174,7 @@
   <div class="dashboard-container">      
     <div class="header-section">      
       <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" />      
-      <p>Plan: <span class="text-warning">FREE</span> | Tipo de Cuenta: <span class="text-info">Personal</span></p>      
+      <p>Plan: <span class="text-warning" id="tipoPlan">FREE</span> | Tipo de Cuenta: <span class="text-info">Personal</span></p>
       <h1>KTT</h1>      
       <h4 class="text-light">on search</h4>      
       <p>Encuentra conexiones, construye historias: tu búsqueda comienza aquí.</p>      
@@ -257,7 +257,25 @@
     measurementId: "G-LNX1B0RLK7"    
   };    
     firebase.initializeApp(firebaseConfig);      
-    const auth = firebase.auth();      
+    const auth = firebase.auth();  
+   // Mostrar el plan desde Firebase y actualizar visualmente
+db.ref(`usuarios/${uid}/plan`).on('value', snapshot => {
+  const plan = snapshot.val() || 'FREE';
+  const tipoPlanEl = document.getElementById('tipoPlan');
+  tipoPlanEl.innerText = plan;
+
+  // Remover clases anteriores
+  tipoPlanEl.classList.remove('text-warning', 'text-info', 'text-danger');
+
+  // Asignar color según el plan
+  if (plan === 'FREE') {
+    tipoPlanEl.classList.add('text-warning');
+  } else if (plan === 'ORO') {
+    tipoPlanEl.classList.add('text-info');
+  } else if (plan === 'PREMIUM') {
+    tipoPlanEl.classList.add('text-danger');
+  }
+}); 
     const db = firebase.database();      
       
     auth.onAuthStateChanged(user => {      

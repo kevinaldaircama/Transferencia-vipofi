@@ -245,84 +245,95 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>      
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>      
       
-  <script>      
-    const firebaseConfig = {      
-        apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",    
-    authDomain: "transferencia-88fd7.firebaseapp.com",    
-    databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",    
-    projectId: "transferencia-88fd7",    
-    storageBucket: "transferencia-88fd7.firebasestorage.app",    
-    messagingSenderId: "343352831024",    
-    appId: "1:343352831024:web:9ac2d08b41874b15e611f5",    
-    measurementId: "G-LNX1B0RLK7"    
-  };    
-    firebase.initializeApp(firebaseConfig);      
-    const auth = firebase.auth();  
-   // Mostrar el plan desde Firebase y actualizar visualmente
-db.ref(`usuarios/${uid}/plan`).on('value', snapshot => {
-  const plan = snapshot.val() || 'FREE';
-  const tipoPlanEl = document.getElementById('tipoPlan');
-  tipoPlanEl.innerText = plan;
+<!-- SCRIPT COMPLETO (fragmento relevante actualizado) -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
+    authDomain: "transferencia-88fd7.firebaseapp.com",
+    databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
+    projectId: "transferencia-88fd7",
+    storageBucket: "transferencia-88fd7.firebasestorage.app",
+    messagingSenderId: "343352831024",
+    appId: "1:343352831024:web:9ac2d08b41874b15e611f5",
+    measurementId: "G-LNX1B0RLK7"
+  };
+  
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
 
-  // Remover clases anteriores
-  tipoPlanEl.classList.remove('text-warning', 'text-info', 'text-danger');
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      const uid = user.uid;
 
-  // Asignar color según el plan
-  if (plan === 'FREE') {
-    tipoPlanEl.classList.add('text-warning');
-  } else if (plan === 'ORO') {
-    tipoPlanEl.classList.add('text-info');
-  } else if (plan === 'PREMIUM') {
-    tipoPlanEl.classList.add('text-danger');
-  }
-}); 
-    const db = firebase.database();      
-      
-    auth.onAuthStateChanged(user => {      
-      if (user) {      
-        const uid = user.uid;      
-      
-        db.ref(`usuarios/${uid}/notificacionRecarga`).once('value').then(snapshot => {      
-          const data = snapshot.val();      
-          if (data && !data.leido) {      
-            document.getElementById('contenidoNotificacion').innerText = data.mensaje;      
-            const modal = new bootstrap.Modal(document.getElementById('modalNotificacion'));      
-            modal.show();      
-            document.getElementById('modalNotificacion').addEventListener('hidden.bs.modal', () => {      
-              db.ref(`usuarios/${uid}/notificacionRecarga/leido`).set(true);      
-            });      
-          }      
-        });      
-      
-        // Mostrar saldo      
-        db.ref(`usuarios/${uid}/comisionesTotales`).on('value', snapshot => {      
-          const creditos = parseFloat(snapshot.val()) || 0;      
-          document.getElementById('saldoUsuario').innerHTML = `$${creditos.toFixed(2)} <span class="text-muted">saldo actual a la fecha</span>`;      
-        });      
-      
-        // Mostrar UID y botón para copiar      
-        const uidTexto = document.createElement('p');      
-        uidTexto.innerHTML = `<strong>Tu UID:</strong> <code id="uidCopiable" style="cursor:pointer">${uid}</code>`;      
-        uidTexto.classList.add('text-info');      
-        document.querySelector('.text-center.mt-3').appendChild(uidTexto);      
-      
-        setTimeout(() => {      
-          document.getElementById('uidCopiable').addEventListener('click', () => {      
-            navigator.clipboard.writeText(uid).then(() => {      
-              const msg = document.createElement('div');      
-              msg.innerText = "✅ UID copiado al portapapeles";      
-              msg.style.color = "#0f0";      
-              msg.style.fontSize = "0.9rem";      
-              msg.style.marginTop = "0.3rem";      
-              uidTexto.appendChild(msg);      
-              setTimeout(() => msg.remove(), 2000);      
-            });      
-          });      
-        }, 100);      
-      } else {      
-        window.location.href = "index.html";      
-      }      
-    });      
+      // ✅ MOSTRAR PLAN DESDE FIREBASE
+      db.ref(`usuarios/${uid}/plan`).on('value', snapshot => {
+        const plan = snapshot.val() || 'FREE';
+        const tipoPlanEl = document.getElementById('tipoPlan');
+        tipoPlanEl.innerText = plan;
+
+        tipoPlanEl.classList.remove(
+          'text-warning', 'text-info', 'text-danger', 'text-muted', 'text-primary', 'text-success'
+        );
+
+        if (plan === 'FREE') {
+          tipoPlanEl.classList.add('text-warning');
+        } else if (plan === 'BRONCE') {
+          tipoPlanEl.classList.add('text-muted');
+        } else if (plan === 'ORO') {
+          tipoPlanEl.classList.add('text-info');
+        } else if (plan === 'PREMIUM') {
+          tipoPlanEl.classList.add('text-danger');
+        } else if (plan === 'VIP') {
+          tipoPlanEl.classList.add('text-primary');
+        } else if (plan === 'DIAMANTE') {
+          tipoPlanEl.classList.add('text-success');
+        }
+      });
+
+      // ✅ SALDO ACTUAL
+      db.ref(`usuarios/${uid}/comisionesTotales`).on('value', snapshot => {
+        const creditos = parseFloat(snapshot.val()) || 0;
+        document.getElementById('saldoUsuario').innerHTML =
+          `$${creditos.toFixed(2)} <span class="text-muted">saldo actual a la fecha</span>`;
+      });
+
+      // ✅ NOTIFICACIÓN
+      db.ref(`usuarios/${uid}/notificacionRecarga`).once('value').then(snapshot => {
+        const data = snapshot.val();
+        if (data && !data.leido) {
+          document.getElementById('contenidoNotificacion').innerText = data.mensaje;
+          const modal = new bootstrap.Modal(document.getElementById('modalNotificacion'));
+          modal.show();
+          document.getElementById('modalNotificacion').addEventListener('hidden.bs.modal', () => {
+            db.ref(`usuarios/${uid}/notificacionRecarga/leido`).set(true);
+          });
+        }
+      });
+
+      // ✅ UID COPIABLE
+      const uidTexto = document.createElement('p');
+      uidTexto.innerHTML = `<strong>Tu UID:</strong> <code id="uidCopiable" style="cursor:pointer">${uid}</code>`;
+      uidTexto.classList.add('text-info');
+      document.querySelector('.text-center.mt-3').appendChild(uidTexto);
+
+      setTimeout(() => {
+        document.getElementById('uidCopiable').addEventListener('click', () => {
+          navigator.clipboard.writeText(uid).then(() => {
+            const msg = document.createElement('div');
+            msg.innerText = "✅ UID copiado al portapapeles";
+            msg.style.color = "#0f0";
+            msg.style.fontSize = "0.9rem";
+            msg.style.marginTop = "0.3rem";
+            uidTexto.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+          });
+        });
+      }, 100);
+    } else {
+      window.location.href = "index.html";
+    }
+  });
       
     function toggleSidebar() {      
       document.getElementById('sidebar').classList.toggle('active');      

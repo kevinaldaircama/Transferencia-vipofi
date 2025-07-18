@@ -42,6 +42,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
+<!-- Lógica de recarga con asignación de plan -->
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
@@ -68,11 +69,31 @@
 
       if (admins.includes(email)) {
         document.getElementById('adminPanel').style.display = 'block';
+
         db.ref(`usuarios/${uid}/comisionesTotales`).on('value', snapshot => {
           const creditos = parseFloat(snapshot.val()) || 0;
           document.getElementById('saldoUsuario').innerHTML =
             `$${creditos.toFixed(2)} <span class="text-muted">saldo actual a la fecha</span>`;
         });
+
+        // Mostrar el plan del usuario logueado
+        db.ref(`usuarios/${uid}/plan`).on('value', snap => {
+          const plan = snap.val() || 'FREE';
+          const tipoPlanEl = document.getElementById('tipoPlan');
+          tipoPlanEl.innerText = plan;
+
+          tipoPlanEl.classList.remove(
+            'text-warning', 'text-info', 'text-danger', 'text-muted', 'text-primary', 'text-success'
+          );
+
+          if (plan === 'FREE') tipoPlanEl.classList.add('text-warning');
+          else if (plan === 'BRONCE') tipoPlanEl.classList.add('text-muted');
+          else if (plan === 'ORO') tipoPlanEl.classList.add('text-info');
+          else if (plan === 'PREMIUM') tipoPlanEl.classList.add('text-danger');
+          else if (plan === 'VIP') tipoPlanEl.classList.add('text-primary');
+          else if (plan === 'DIAMANTE') tipoPlanEl.classList.add('text-success');
+        });
+
       } else {
         document.getElementById('noAccessMsg').style.display = 'block';
       }
@@ -102,22 +123,33 @@
       .then(nuevoSaldo => {
         alert('Recarga exitosa.');
 
-        if (auth.currentUser && auth.currentUser.uid === uid) {
-          document.getElementById('saldoUsuario').innerHTML =
-            `$${nuevoSaldo.toFixed(2)} <span class="text-muted">saldo actualizado</span>`;
+        // ✅ Determinar plan según el monto recargado
+        let nuevoPlan = "FREE";
+        if (monto >= 10 && monto < 50) {
+          nuevoPlan = "BRONCE";
+        } else if (monto >= 50 && monto < 80) {
+          nuevoPlan = "ORO";
+        } else if (monto >= 80 && monto < 120) {
+          nuevoPlan = "PREMIUM";
+        } else if (monto >= 120 && monto < 200) {
+          nuevoPlan = "VIP";
+        } else if (monto >= 200) {
+          nuevoPlan = "DIAMANTE";
         }
 
-        // 💡 LIMPIAR CAMPOS
+        db.ref(`usuarios/${uid}/plan`).set(nuevoPlan);
+
+        if (auth.currentUser && auth.currentUser.uid === uid) {
+          document.getElementById('tipoPlan').innerText = nuevoPlan;
+        }
+
         document.getElementById('inputUid').value = '';
         document.getElementById('inputMonto').value = '';
 
-        // 🔁 ACTUALIZAR TAMBIÉN EN REFERIDOS
+        // 🔁 Actualizar referidos si existen
         db.ref(`usuarios/${uid}/referidoId`).once('value').then(refSnap => {
           const refId = refSnap.val();
-          if (!refId) {
-            console.warn(`El usuario ${uid} no tiene aún un referidoId asignado.`);
-            return;
-          }
+          if (!refId) return;
 
           const referidoRef = db.ref(`referidos/${refId}/${uid}`);
           const hoy = new Date().toLocaleDateString('es-ES');
@@ -147,12 +179,13 @@
           });
         });
 
-        // ✅ NUEVA NOTIFICACIÓN
+        // ✅ Notificación
         db.ref(`usuarios/${uid}/notificacionRecarga`).set({
           mensaje: `Se recargaron correctamente ${monto.toFixed(2)} créditos a tu cuenta.`,
           timestamp: Date.now(),
           leido: false
         });
+
       })
       .catch(error => {
         console.error('Error al recargar:', error);

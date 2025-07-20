@@ -1,261 +1,269 @@
-<!DOCTYPE html>    
-<html lang="es">    
-<head>    
-  <meta charset="UTF-8" />    
-  <meta name="viewport" content="width=device-width, initial-scale=1" />    
-  <title>Registro</title>    
-  <link rel="icon" type="image/png" href="3440119_ico.png">    
- <!-- Metadatos Open Graph para vista previa -->
-<meta property="og:title" content="¡Únete a Transferencia VIP y gana créditos!" />
-<meta property="og:description" content="Regístrate con este enlace de referido y recibe hasta 10 créditos gratis. Empieza a ganar hoy." />
-<meta property="og:image" content="https://transferenciavip.xyz/3440119_ico.png" />
-<meta property="og:url" content="https://transferenciavip.xyz" />
-<meta property="og:type" content="website" />
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro</title>
+  <link rel="icon" type="image/png" href="3440119_ico.png">
 
-<!-- Metadatos Twitter Cards -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="¡Gana créditos con Transferencia VIP!" />
-<meta name="twitter:description" content="Regístrate con un referido y recibe bonificaciones instantáneas." />
-<meta name="twitter:image" content="https://transferenciavip.xyz/3440119_ico.png" />
-  <style>    
-    * { box-sizing: border-box; }    
-    
-    body {    
-      font-family: 'Segoe UI', sans-serif;    
-      background: linear-gradient(to right, #a1c4fd, #c2e9fb);    
-      margin: 0;    
-      display: flex;    
-      height: 100vh;    
-      justify-content: center;    
-      align-items: center;    
-    }    
-    
-    .container {    
-      background: white;    
-      padding: 40px 30px;    
-      border-radius: 16px;    
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);    
-      width: 100%;    
-      max-width: 400px;    
-      text-align: center;    
-    }    
-    
-    .container:hover {    
-      transform: scale(1.01);    
-    }    
-    
-    .logo {    
-      width: 80px;    
-      margin-bottom: 15px;    
-    }    
-    
-    h2 {    
-      margin: 10px 0 25px;    
-      color: #333;    
-    }    
-    
-    input[type="email"],    
-    input[type="password"] {    
-      width: 100%;    
-      padding: 12px;    
-      margin-bottom: 16px;    
-      border: 1px solid #ccc;    
-      border-radius: 8px;    
-      font-size: 15px;    
-    }    
-    
-    button {    
-      width: 100%;    
-      background-color: #007bff;    
-      color: white;    
-      padding: 14px;    
-      border: none;    
-      border-radius: 8px;    
-      font-size: 16px;    
-      cursor: pointer;    
-      transition: background-color 0.3s ease;    
-    }    
-    
-    button:hover {    
-      background-color: #0056b3;    
-    }    
-    
-    .google-btn {    
-      display: flex;    
-      align-items: center;    
-      justify-content: center;    
-      background: #ffffff;    
-      border: 1px solid #ddd;    
-      border-radius: 8px;    
-      font-size: 15px;    
-      padding: 10px;    
-      width: 100%;    
-      cursor: pointer;    
-      transition: box-shadow 0.3s ease;    
-      margin-top: 15px;    
-    }    
-    
-    .google-btn:hover {    
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);    
-    }    
-    
-    .google-icon {    
-      height: 20px;    
-      margin-right: 10px;    
-    }    
-    
-    .g-recaptcha {    
-      margin: 10px 0 20px;    
-    }    
-    
-    p {    
-      margin-top: 20px;    
-      font-size: 14px;    
-    }    
-    
-    a {    
-      color: #007bff;    
-      text-decoration: none;    
-    }    
-    
-    a:hover {    
-      text-decoration: underline;    
-    }    
-  </style>    
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>    
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>    
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>    
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>    
-</head>    
-<body>    
-  <div class="container">    
-  <h2>Registro</h2>    
-    <img src="3440119_ico.png" alt="Logo" class="logo" />    
-    <form id="registerForm">    
-      <input type="email" id="regEmail" placeholder="Correo electrónico" required />    
-      <input type="password" id="regPass" placeholder="Contraseña" required />    
-      <div class="g-recaptcha" data-sitekey="6LcXu4IrAAAAAKC8vZ5ALC0BeHZRqeA25RTkX1sI"></div>    
-      <button type="submit">Registrarse</button>    
-    </form>    
-    
-    <button id="googleRegisterBtn" class="google-btn">    
-      <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">    
-      Registrarse con Google    
-    </button>    
-    
-    <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>    
-  </div>    
-    
-  <script>    
-    const firebaseConfig = {    
-    apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
-    authDomain: "transferencia-88fd7.firebaseapp.com",
-    databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
-    projectId: "transferencia-88fd7",
-    storageBucket: "transferencia-88fd7.firebasestorage.app",
-    messagingSenderId: "343352831024",
-    appId: "1:343352831024:web:9ac2d08b41874b15e611f5",
-    measurementId: "G-LNX1B0RLK7"
-  };
-    
-    firebase.initializeApp(firebaseConfig);    
-    const auth = firebase.auth();    
-    const db = firebase.database();    
-    
-    function obtenerIdReferido() {    
-      const path = window.location.pathname;    
-      const partes = path.split('/');    
-      let rawId = partes[partes.length - 1];    
-      return rawId.replace(/[.#$[\]/]/g, '');    
-    }    
-    
-    const idReferido = localStorage.getItem('idReferido') || null;    
-    
-    document.getElementById('registerForm').addEventListener('submit', (e) => {    
-      e.preventDefault();    
-    
-      const email = document.getElementById('regEmail').value;    
-      const password = document.getElementById('regPass').value;    
-      const recaptchaResponse = grecaptcha.getResponse();    
-    
-      if (!recaptchaResponse) {    
-        alert('Por favor verifica que no eres un robot.');    
-        return;    
-      }    
-    
-      auth.createUserWithEmailAndPassword(email, password)    
-        .then(userCredential => {    
-          const user = userCredential.user;    
-          const userId = user.uid;    
-          const fecha = new Date().toISOString().split('T')[0];    
-    
-  let saldoInicial = idReferido ? 10 : 5;
+  <!-- Metadatos Open Graph -->
+  <meta property="og:title" content="¡Únete a Transferencia VIP y gana créditos!" />
+  <meta property="og:description" content="Regístrate con este enlace de referido y recibe hasta 10 créditos gratis. Empieza a ganar hoy." />
+  <meta property="og:image" content="https://transferenciavip.xyz/3440119_ico.png" />
+  <meta property="og:url" content="https://transferenciavip.xyz" />
+  <meta property="og:type" content="website" />
 
-const data = {
-  correo: email,
-  fecha: fecha,
-  estado: 'activo',
-  saldo: saldoInicial.toFixed(2),
-  recargas: 0,
-  comision: '2.00',
-  ultima: '-'
-};   
-    
-          const updates = {};    
-          updates[`referidos/${idReferido}/${userId}`] = data;    
-          updates[`usuarios/${idReferido}/comisionesTotales`] = firebase.database.ServerValue.increment(2);    
-    
-          return db.ref().update(updates);    
-        })    
-        .then(() => {    
-          alert('Registro exitoso. Ahora puedes iniciar sesión.');    
-          auth.signOut();    
-          window.location.href = "login.html";    
-        })    
-        .catch(error => {    
-          alert('Error: ' + error.message);    
-        });    
-    });    
-    
-    // Registro con Google    
-    document.getElementById('googleRegisterBtn').addEventListener('click', () => {    
-      const provider = new firebase.auth.GoogleAuthProvider();    
-    
-      auth.signInWithPopup(provider)    
-        .then(result => {    
-          const user = result.user;    
-          const userId = user.uid;    
-          const fecha = new Date().toISOString().split('T')[0];    
-    
+  <!-- Metadatos Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="¡Gana créditos con Transferencia VIP!" />
+  <meta name="twitter:description" content="Regístrate con un referido y recibe bonificaciones instantáneas." />
+  <meta name="twitter:image" content="https://transferenciavip.xyz/3440119_ico.png" />
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .container:hover { transform: scale(1.01); }
+    .logo {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+    h2 { margin: 10px 0 25px; color: #333; }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover { background-color: #0056b3; }
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      padding: 10px;
+      width: 100%;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+      margin-top: 15px;
+    }
+    .google-btn:hover {
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+    .google-icon {
+      height: 20px;
+      margin-right: 10px;
+    }
+    .g-recaptcha {
+      margin: 10px 0 20px;
+    }
+    p {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Registro</h2>
+    <img src="3440119_ico.png" alt="Logo" class="logo" />
+
+    <form id="registerForm">
+      <input type="text" id="regUsername" placeholder="Nombre de usuario" required />
+      <input type="email" id="regEmail" placeholder="Correo electrónico" required />
+      <input type="password" id="regPass" placeholder="Contraseña" required />
+
+      <div class="g-recaptcha" data-sitekey="6LcXu4IrAAAAAKC8vZ5ALC0BeHZRqeA25RTkX1sI"></div>
+
+      <div style="text-align: left; margin: 10px 0;">
+        <input type="checkbox" id="acceptPolicy" required />
+        <label for="acceptPolicy">
+          Acepto la <a href="politica.html" target="_blank">Política de privacidad</a> y los Términos de uso.
+        </label>
+      </div>
+
+      <button type="submit">Registrarse</button>
+    </form>
+
+    <button id="googleRegisterBtn" class="google-btn">
+      <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">
+      Registrarse con Google
+    </button>
+
+    <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB28uLNC-7NBDBSJeQJ1Li_bYR6ygbf0DI",
+      authDomain: "transferencia-88fd7.firebaseapp.com",
+      databaseURL: "https://transferencia-88fd7-default-rtdb.firebaseio.com",
+      projectId: "transferencia-88fd7",
+      storageBucket: "transferencia-88fd7.appspot.com",
+      messagingSenderId: "343352831024",
+      appId: "1:343352831024:web:9ac2d08b41874b15e611f5",
+      measurementId: "G-LNX1B0RLK7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    function obtenerIdReferido() {
+      const path = window.location.pathname;
+      const partes = path.split('/');
+      let rawId = partes[partes.length - 1];
+      return rawId.replace(/[.#$[\]/]/g, '');
+    }
+
+    let idReferido = localStorage.getItem('idReferido');
+    if (!idReferido) {
+      idReferido = obtenerIdReferido();
+      if (idReferido) localStorage.setItem('idReferido', idReferido);
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('regUsername').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPass').value;
+      const recaptchaResponse = grecaptcha.getResponse();
+      const accepted = document.getElementById('acceptPolicy').checked;
+
+      if (!recaptchaResponse) {
+        alert('Por favor verifica que no eres un robot.');
+        return;
+      }
+
+      if (!accepted) {
+        alert('Debes aceptar la política de privacidad antes de continuar.');
+        return;
+      }
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          const user = userCredential.user;
+          const userId = user.uid;
+          const fecha = new Date().toISOString().split('T')[0];
           let saldoInicial = idReferido ? 10 : 5;
 
-const data = {
-  correo: user.email,
-  nombre: user.displayName,
-  fecha: fecha,
-  estado: 'activo',
-  saldo: saldoInicial.toFixed(2),
-  recargas: 0,
-  comision: '2.00',
-  ultima: '-',  
-  google: true
-};
-    
-          const updates = {};    
-          updates[`referidos/${idReferido}/${userId}`] = data;    
-          updates[`usuarios/${idReferido}/comisionesTotales`] = firebase.database.ServerValue.increment(2);    
-    
-          return db.ref().update(updates);    
-        })    
-        .then(() => {    
-          alert('Registro con Google exitoso.');    
-          window.location.href = "login.html";    
-        })    
-        .catch(error => {    
-          console.error("Error con registro Google:", error);    
-          alert("Error con Google: " + error.message);    
-        });    
-    });    
-  </script>    
-</body>    
-</html>
+          const data = {
+            correo: email,
+            nombre: username,
+            fecha: fecha,
+            estado: 'activo',
+            saldo: saldoInicial.toFixed(2),
+            recargas: 0,
+            comision: '2.00',
+            ultima: '-'
+          };
+
+          const updates = {};
+          if (idReferido) {
+            updates[`referidos/${idReferido}/${userId}`] = data;
+            updates[`usuarios/${idReferido}/comisionesTotales`] = firebase.database.ServerValue.increment(2);
+          }
+          updates[`usuarios/${userId}`] = data;
+
+          return db.ref().update(updates);
+        })
+        .then(() => {
+          alert('Registro exitoso. Ahora puedes iniciar sesión.');
+          auth.signOut();
+          window.location.href = "login.html";
+        })
+        .catch(error => {
+          alert('Error: ' + error.message);
+        });
+    });
+
+    document.getElementById('googleRegisterBtn').addEventListener('click', () => {
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      auth.signInWithPopup(provider)
+        .then(result => {
+          const user = result.user;
+          const userId = user.uid;
+          const fecha = new Date().toISOString().split('T')[0];
+          let saldoInicial = idReferido ? 10 : 5;
+
+          const data = {
+            correo: user.email,
+            nombre: user.displayName,
+            fecha: fecha,
+            estado: 'activo',
+            saldo: saldoInicial.toFixed(2),
+            recargas: 0,
+            comision: '2.00',
+            ultima: '-',
+            google: true
+          };
+
+          const updates = {};
+          if (idReferido) {
+            updates[`referidos/${idReferido}/${userId}`] = data;
+            updates[`usuarios/${idReferido}/comisionesTotales`] = firebase.database.ServerValue.increment(2);
+          }
+          updates[`usuarios/${userId}`] = data;
+
+          return db.ref().update(updates);
+        })
+        .then(() => {
+          alert('Registro con Google exitoso.');
+          window.location.href = "login.html";
+        })
+        .catch(error => {
+          console.error("Error con registro Google:", error);
+          alert("Error con Google: " + error.message);
+        });
+    });
+  </script>
+</body>
+  </html>

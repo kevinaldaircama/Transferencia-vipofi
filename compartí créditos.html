@@ -170,11 +170,11 @@ button:hover {
       }
 
       const destinoSnap = await db.ref(`usuarios/${uidDestino}`).once('value');
-      const saldoDestino = parseFloat(destinoSnap.val()?.saldo || 0);
+      const saldoDestino = parseFloat(destinoSnap.val()?.comisionesTotales || 0);
 
       const updates = {};
-      updates[`usuarios/${uidOrigen}/saldo`] = saldoOrigen - cantidad;
-      updates[`usuarios/${uidDestino}/saldo`] = saldoDestino + cantidad;
+      updates[`usuarios/${uidOrigen}/comisionesTotales`] = saldoOrigen - cantidad;
+updates[`usuarios/${uidDestino}/comisionesTotales`] = saldoDestino + cantidad;
 
       await db.ref().update(updates);
 
